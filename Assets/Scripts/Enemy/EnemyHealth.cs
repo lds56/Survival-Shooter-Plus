@@ -4,11 +4,12 @@ public class EnemyHealth : MonoBehaviour
 {
     public int startingHealth = 100;
     public int currentHealth;
-    public float sinkSpeed = 2.5f;
+    public float sinkSpeed = 2.0f;
     public int scoreValue = 10;
     public AudioClip deathClip;
 
-
+	public GameObject littleMonster;
+	
     Animator anim;
     AudioSource enemyAudio;
     ParticleSystem hitParticles;
@@ -46,8 +47,8 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= amount;
             
-        hitParticles.transform.position = hitPoint;
-        hitParticles.Play();
+        //hitParticles.transform.position = hitPoint;
+        //hitParticles.Play();
 
         if(currentHealth <= 0)
         {
@@ -66,6 +67,15 @@ public class EnemyHealth : MonoBehaviour
 
         enemyAudio.clip = deathClip;
         enemyAudio.Play ();
+
+		if (this.gameObject.name == "Hellephant(Clone)" && littleMonster != null) {
+			Instantiate (littleMonster, this.transform.position, this.transform.rotation);
+			Instantiate (littleMonster, this.transform.position, this.transform.rotation);
+		}
+
+		if (this.gameObject.name != "LittleHellephant(Clone)") 
+			SendMessageUpwards ("decEnemyAmount");
+
     }
 
 
@@ -74,7 +84,7 @@ public class EnemyHealth : MonoBehaviour
         GetComponent <NavMeshAgent> ().enabled = false;
         GetComponent <Rigidbody> ().isKinematic = true;
         isSinking = true;
-        //ScoreManager.score += scoreValue;
+        ScoreManager.score += scoreValue;
         Destroy (gameObject, 2f);
     }
 }

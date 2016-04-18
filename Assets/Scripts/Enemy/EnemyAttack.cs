@@ -3,23 +3,27 @@ using System.Collections;
 
 public class EnemyAttack : MonoBehaviour
 {
-    public float timeBetweenAttacks = 0.5f;
+    public float timeBetweenAttacks = 1f;
     public int attackDamage = 10;
 
 
     Animator anim;
     GameObject player;
     PlayerHealth playerHealth;
-    //EnemyHealth enemyHealth;
+    EnemyHealth enemyHealth;
     bool playerInRange;
     float timer;
-
+	
+	Ray shootRay;
+	RaycastHit shootHit;
+	int shootableMask;
+	int range = 5;
 
     void Awake ()
     {
         player = GameObject.FindGameObjectWithTag ("Player");
         playerHealth = player.GetComponent <PlayerHealth> ();
-        //enemyHealth = GetComponent<EnemyHealth>();
+        enemyHealth = GetComponent<EnemyHealth>();
         anim = GetComponent <Animator> ();
     }
 
@@ -46,9 +50,16 @@ public class EnemyAttack : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if(timer >= timeBetweenAttacks && playerInRange/* && enemyHealth.currentHealth > 0*/)
+        if(timer >= timeBetweenAttacks && enemyHealth.currentHealth > 0)
         {
-            Attack ();
+//			if (this.gameObject.name == "Hellephant(Clone)") {
+//				if (PlayerInRay())
+//					HellephantAttack();
+//			}
+//			else {
+				if (playerInRange)
+         			Attack ();
+			//}
         }
 
         if(playerHealth.currentHealth <= 0)
@@ -67,4 +78,28 @@ public class EnemyAttack : MonoBehaviour
             playerHealth.TakeDamage (attackDamage);
         }
     }
+
+//	bool PlayerInRay() {
+//		shootRay.origin = transform.position;
+//		shootRay.direction = transform.forward;
+//		
+//		if(Physics.Raycast (shootRay, out shootHit, range, shootableMask))
+//		{
+//			PlayerHealth playerHealth = shootHit.collider.GetComponent <PlayerHealth> ();
+//			if(playerHealth != null)
+//			{
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//		else
+//		{
+//			return false;
+//		}
+//	}
+//
+//	void HellephantAttack() {
+//
+//	}
 }

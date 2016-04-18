@@ -1,85 +1,158 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerShooting : MonoBehaviour
 {
-    public int damagePerShot = 20;
-    public float timeBetweenBullets = 0.15f;
-    public float range = 100f;
+	public IGun[] guns;
+	public Grenade grenade;
+	public float grenadeRate;
+	public float maxStrength;
+	public float deltaStrength;
 
+	public int maxGrenadeAmount = 20;
+	
+	public WeaponManager weaponManager;
+	public NotificationManager notiManager;
 
-    float timer;
-    Ray shootRay;
-    RaycastHit shootHit;
-    int shootableMask;
-    ParticleSystem gunParticles;
-    LineRenderer gunLine;
-    AudioSource gunAudio;
-    Light gunLight;
-    float effectsDisplayTime = 0.2f;
+	float nextGrenade;
+	float throwStrength;
+	float nextStrength = 0f;
+	float strengthRate = 0.08f;
+	float time;
 
+	float minRatio = 0.2f;
+
+	int curIdx;
+	IGun curGun;
+
+	int grenadeAmount;
+
+	bool weaponUITrigger = false;
 
     void Awake ()
     {
-        shootableMask = LayerMask.GetMask ("Shootable");
-        gunParticles = GetComponent<ParticleSystem> ();
-        gunLine = GetComponent <LineRenderer> ();
-        gunAudio = GetComponent<AudioSource> ();
-        gunLight = GetComponent<Light> ();
-    }
+		
+		Random.seed = (int)System.DateTime.Now.Ticks;
+		//strengthRate = 500 * Time.deltaTime;
+		foreach (var gun in guns) {
+			gun.transform.SetParent(this.transform);
+			gun.transform.localPosition = Vector3.zero;
+		}
 
+		curGun = guns [4];
+
+		grenadeAmount = maxGrenadeAmount;
+
+		updateCanvas ();
+
+    }
 
     void Update ()
     {
-        timer += Time.deltaTime;
-
-		if(Input.GetButton ("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
-        {
-            Shoot ();
-        }
-
-        if(timer >= timeBetweenBullets * effectsDisplayTime)
-        {
-            DisableEffects ();
-        }
+		switchGun ();
+		fire ();
+		throwGrenade ();
     }
 
+	void LateUpdate() {
+		updateCanvas ();
+	}
+
+	void fire() {
+		//if (curGun.ammo > 0) {
+			curGun.fire ();
+		//}
+	}
+
+	void switchGun() {
+		float scroll = Input.GetAxis("Mouse ScrollWheel");
+		if (scroll > 0f) {
+			curIdx = (curIdx + 1) % guns.Length;
+		} else if (scroll < 0f) {
+			curIdx = (curIdx - 1 + guns.Length) % guns.Length;
+		}
+		curGun = guns[curIdx];
+		//Debug.Log ("scroll: " + scroll);
+		//Debug.Log ("Idx: " + curIdx);
+	}
+
+	void throwGrenade() {
+		if (Input.GetButton("Fire2") && throwStrength<maxStrength) {
+			throwStrength += deltaStrength * strengthRate;
+			Debug.Log(throwStrength);
+		}
+		
+		if (Input.GetButtonUp("Fire2") && grenadeAmount > 0) {
+			
+			if (Time.time > nextGrenade) {
+				nextGrenade = Time.time + grenadeRate;
+				
+				Grenade g = (Grenade) Instantiate(grenade, this.transform.position, this.transform.rotation);
+				g.throwForward(throwStrength);
+
+				grenadeAmount--;
+			}
+			
+			throwStrength = 0f;
+		}
+	}
+//
+//	void zoom() {
+//		if (Input.GetKeyDown () == "Z") {
+//			.fieldOfView = Mathf.Lerp(camera.fieldOfView,zoom,Time.deltaTime*smooth);
+//		}
+//	}
+
+	void updateCanvas() {
+		weaponManager.setGrenadeAmount (grenadeAmount);
+		weaponManager.setAmmoAmount (curGun.ammo);
+		weaponManager.setGunImage (curIdx);
+	}
+
+	public bool isholdingSniper() {
+		return curIdx == 5;
+	}
 
     public void DisableEffects ()
     {
-        gunLine.enabled = false;
-        gunLight.enabled = false;
+		curGun.disabled ();
     }
 
+	public void addAmmo(int type) {
 
-    void Shoot ()
-    {
-        timer = 0f;
+		if (type == guns.Length) {
+			int lastAmount = grenadeAmount;
 
-        gunAudio.Play ();
+			grenadeAmount += (int)(maxGrenadeAmount * (minRatio + Random.value * (1 - minRatio)));
+			if (grenadeAmount > maxGrenadeAmount)
+				grenadeAmount = maxGrenadeAmount;
 
-        gunLight.enabled = true;
+			notiManager.notifyNotification("Grenade +" + (grenadeAmount - lastAmount));
 
-        gunParticles.Stop ();
-        gunParticles.Play ();
+		} else {
+			int lastAmount = guns[type].ammo;
+			IGun theGun = guns[type];
 
-        gunLine.enabled = true;
-        gunLine.SetPosition (0, transform.position);
+			int amount = (int)(theGun.AmmoPerClip * (minRatio + Random.value * (1 - minRatio)));
 
-        shootRay.origin = transform.position;
-        shootRay.direction = transform.forward;
+			if (theGun.ammo + amount > theGun.AmmoPerClip)
+				theGun.ammo = theGun.AmmoPerClip;
+			else {
+				theGun.ammo = theGun.ammo + amount;
+			}
 
-        if(Physics.Raycast (shootRay, out shootHit, range, shootableMask))
-        {
-            EnemyHealth enemyHealth = shootHit.collider.GetComponent <EnemyHealth> ();
-            if(enemyHealth != null)
-            {
-                enemyHealth.TakeDamage (damagePerShot, shootHit.point);
-            }
-            gunLine.SetPosition (1, shootHit.point);
-        }
-        else
-        {
-            gunLine.SetPosition (1, shootRay.origin + shootRay.direction * range);
-        }
-    }
+			notiManager.notifyNotification(guns[type].name + " ammo +" + (theGun.ammo - lastAmount));
+		}
+	}
+
+	public void setScope(bool scopeFlag) {
+		weaponManager.setScope (scopeFlag);
+	}
+
+	public void setVolume(float v) {
+		foreach (var gun in guns) {
+			gun.GetComponent<AudioSource>().volume = v;
+		} 
+	}
+
 }

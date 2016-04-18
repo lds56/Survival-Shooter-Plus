@@ -12,11 +12,12 @@ public class PlayerHealth : MonoBehaviour
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
 
+	public NotificationManager notiManager;
 
     Animator anim;
     AudioSource playerAudio;
     PlayerMovement playerMovement;
-    //PlayerShooting playerShooting;
+    PlayerShooting playerShooting;
     bool isDead;
     bool damaged;
 
@@ -26,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
         anim = GetComponent <Animator> ();
         playerAudio = GetComponent <AudioSource> ();
         playerMovement = GetComponent <PlayerMovement> ();
-        //playerShooting = GetComponentInChildren <PlayerShooting> ();
+        playerShooting = GetComponentInChildren <PlayerShooting> ();
         currentHealth = startingHealth;
     }
 
@@ -61,12 +62,20 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+	public void addHealth(int amount) {
+		currentHealth += amount;
+		if (currentHealth > startingHealth)
+			currentHealth = startingHealth;
+		healthSlider.value = currentHealth;
+
+		notiManager.notifyNotification ("Health +" + amount.ToString ());
+	}
 
     void Death ()
     {
         isDead = true;
 
-        //playerShooting.DisableEffects ();
+        playerShooting.DisableEffects ();
 
         anim.SetTrigger ("Die");
 
@@ -74,12 +83,10 @@ public class PlayerHealth : MonoBehaviour
         playerAudio.Play ();
 
         playerMovement.enabled = false;
-        //playerShooting.enabled = false;
+        playerShooting.enabled = false;
+
+		notiManager.notifyDead ();
     }
 
 
-    public void RestartLevel ()
-    {
-        Application.LoadLevel (Application.loadedLevel);
-    }
 }
