@@ -2,15 +2,14 @@
 
 ## Objective
 
-The purpose of the original project is to give Unity developers and designers
-a place to show off their skills, by adding new features
+The purpose of the [original project](https://github.com/Wizcorp/unitydemo-SurvivalShooter) is to give Unity developers and designers a place to show off their skills, by adding new features
 or fixing issues.
 
 The process is entirely public; this allows contributors to keep some
 ownership on their contributions. This is a great way to build your online
 presence.
 
-Our approach is open-source, collaborative, and allows great minds to truly show their true potential.
+It is open-source, collaborative, and allows great minds to truly show their true potential.
 
 ## Disclaimer
 
