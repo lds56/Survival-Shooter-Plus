@@ -1,4 +1,4 @@
-# Unity game demo: Survival Shooter Plus
+# Survival Shooter Plus
 
 ## Objective
 
@@ -19,6 +19,12 @@ I claims no ownership on some parts of assets and pledges not to use this projec
 ## New Features
 
 - Six kinds of guns and the grenade as weapon options
+  - Pistol
+  - Submachine
+  - Railgun
+  - Rocket Launcher
+  - Shotgun
+  - Sniper Rifle
 - New shooting effect and explosion
 - Switch between first person view and third person view
 - Enemy AI optimization
