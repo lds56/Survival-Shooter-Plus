@@ -14,7 +14,7 @@ It is open-source, collaborative, and allows great minds to truly show their tru
 ## Disclaimer
 
 This project is a fork from [Wizcorp's project](https://github.com/Wizcorp/unitydemo-SurvivalShooter).
-I claims no ownership on a part of assets and pledges not to use this project for financial gain.
+I claims no ownership on some parts of assets and pledges not to use this project for financial gain.
 
 ## New Features
 
