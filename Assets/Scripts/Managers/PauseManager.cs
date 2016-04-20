@@ -8,10 +8,12 @@ using UnityEditor;
 public class PauseManager : MonoBehaviour {
 
 	Canvas canvas;
+	bool isPaused;
 
 	void Start()
 	{
 		canvas = GetComponent<Canvas>();
+		isPaused = false;
 	}
 
 	void Update()
@@ -20,12 +22,26 @@ public class PauseManager : MonoBehaviour {
 		{
 			canvas.enabled = !canvas.enabled;
 			Pause();
+			SetCursor();
 		}
 	}
 
 	public void Pause()
 	{
-		Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+		isPaused = !isPaused;
+		Time.timeScale = isPaused ? 0 : 1;
+	}
+
+	public void SetCursor() {
+		if (Camera.main.name == "PlayerCamera") {
+			if (isPaused) {
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+			} else {
+				Cursor.lockState = CursorLockMode.Locked;
+				Cursor.visible = false;
+			}
+		}
 	}
 
 	public void Quit()

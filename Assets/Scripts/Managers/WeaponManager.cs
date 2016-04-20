@@ -26,14 +26,6 @@ public class WeaponManager : MonoBehaviour {
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;
 
-		//Debug.Log ("Screen: " + screenWidth + "x" + screenHeight);
-		//RectTransform rt = scopeImage.gameObject.GetComponent<RectTransform>();
-		//Debug.Log ("screen width: " + screenWidth + ", width: " + rt.rect.height);
-		//rt.sizeDelta = new Vector2(rt.rect.width * screenHeight / rt.rect.height, 0);
-		//if (rt.rect.height < screenHeight) {
-		//	rt.localScale();
-			//rt.sizeDelta = new Vector2(rt.rect.width * screenHeight / rt.rect.height, screenHeight);
-		//}
 	}
 
 	public void setGrenadeAmount(int amount) {

@@ -37,6 +37,7 @@ public class PlayerShooting : MonoBehaviour
 		foreach (var gun in guns) {
 			gun.transform.SetParent(this.transform);
 			gun.transform.localPosition = Vector3.zero;
+			gun.ammo = (int)(gun.AmmoPerClip * 0.1f);
 		}
 
 		curGun = guns [4];

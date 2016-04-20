@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2369880}
   - 114: {fileID: 11463572}
   - 54: {fileID: 5464712}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,6 +141,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: damage
       value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

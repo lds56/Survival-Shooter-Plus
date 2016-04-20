@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2357918}
   - 114: {fileID: 11414294}
   - 65: {fileID: 6549924}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Heart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,6 +98,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: health
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

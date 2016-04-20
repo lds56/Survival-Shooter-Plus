@@ -55,13 +55,17 @@ public class Grenade : MonoBehaviour {
 			{
 				EnemyHealth enemyHealth = col.GetComponent <EnemyHealth> ();
 				if (enemyHealth != null) {
-					Debug.Log("health");
 					enemyHealth.TakeDamage (damage, p);
 				}
+				
+				PlayerHealth playerHealth = col.GetComponent <PlayerHealth> ();
+				if (playerHealth != null) {
+					playerHealth.TakeDamage (damage);
+				}
+
 				rigidbodies.Add(col.attachedRigidbody);
 			}
 		}
-		Debug.Log (rigidbodies.Count);
 		foreach (var rbd in rigidbodies)
 		{
 			rbd.AddExplosionForce(explosionForce, p, r, 1, ForceMode.Impulse);

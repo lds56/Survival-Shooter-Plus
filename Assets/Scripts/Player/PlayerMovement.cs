@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
 	public PortalManager portalManager;
 
+	public float MouseSen { get; set; }
+
 	float horizontalSpeed = 10f, verticalSpeed = 10f;
 
 	Vector3 movement;
@@ -26,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
 
 	float gravitySpeed = 1f;
 	float gravityASpeed = 1f;
+
+	float normMouseSen;
 
 	Ray camRay;
 
@@ -66,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
 		playerShooting = GetComponentInChildren<PlayerShooting> ();
 
 		originalFOV = playerCamera.fieldOfView;
+
+		MouseSen = 1f;
 	}
 
 	void Update() {
@@ -180,26 +186,16 @@ public class PlayerMovement : MonoBehaviour
 
 	void FirstPersonTurning() {		
 
+		normMouseSen = 0.1f + 0.9f * MouseSen;
+
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-		
-//		camRay = worldCamera.ScreenPointToRay (Input.mousePosition);
-//
-//		RaycastHit skyboxHit;
-//		
-//		if (Physics.Raycast (camRay, out skyboxHit, 10.0f, floorMask)) {
-//			Vector3 playerToMouse = floorHit.point-transform.position;
-//			playerToMouse.y = 0f;
-//			
-//			Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-//			playerRigidBody.MoveRotation(newRotation);
-//		}
 
 		float fph = horizontalSpeed * Input.GetAxis ("Mouse X");
-		transform.Rotate (0, fph, 0);
+		transform.Rotate (0, normMouseSen * fph, 0);
 
 		float fpv = verticalSpeed * Input.GetAxis ("Mouse Y");
-		playerCamera.transform.Rotate (-fpv, 0, 0);
+		playerCamera.transform.Rotate (- normMouseSen * fpv, 0, 0);
 
 	}
 

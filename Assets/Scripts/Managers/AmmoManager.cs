@@ -8,7 +8,7 @@ public class AmmoManager : MonoBehaviour {
 	public Heart heart;
 	public int maxAmount;
 
-	const float la = 45f, lb = 45f;
+	const float la = 34f, lb = 34f;
 	const float ammoY = 0.66f;
 	int counter;
 	int ammoAmount = 0, heartAmount = 0;
@@ -29,8 +29,8 @@ public class AmmoManager : MonoBehaviour {
 
 				Vector3 p;
 				do {
-					float ammoX = Random.Range (-la/2, la/2);
-					float ammoZ = Random.Range (-lb/2, lb/2);
+					float ammoX = Random.Range (-la, la);
+					float ammoZ = Random.Range (-(lb - Mathf.Abs(ammoX)), lb - Mathf.Abs(ammoX));
 					p = new Vector3(ammoX, ammoY, ammoZ);
 				} while(Physics.OverlapSphere(p, 5f).Length == 0);
 

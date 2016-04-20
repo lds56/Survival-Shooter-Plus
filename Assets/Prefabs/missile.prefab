@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 470258}
   - 33: {fileID: 3379570}
   - 23: {fileID: 2385954}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Missile_side_Ext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ GameObject:
   - 4: {fileID: 410922}
   - 114: {fileID: 11498524}
   - 54: {fileID: 5408098}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - 33: {fileID: 3365802}
   - 23: {fileID: 2394210}
   - 65: {fileID: 6518122}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,6 +207,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: speed
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
